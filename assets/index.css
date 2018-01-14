@@ -1,0 +1,12 @@
+body{
+    background-color:#eee;
+    font-family:lato;
+}
+h1,p,a{
+    text-align: center;
+    text-decoration: none;
+    display: block;
+}
+footer{
+    font-family:Myriad Pro;
+}
