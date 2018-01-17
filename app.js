@@ -2,6 +2,7 @@ var fs = require("fs");
 var express = require("express");
 var ejs = require("ejs");
 var bodyParser = require("body-parser");
+var func = require("./control/func");
 var app = express();
 
 //Static files and engine ⛔⛔⛔
@@ -13,7 +14,7 @@ var urlencodedParser = bodyParser.urlencoded({
 });
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded());
-// in latest body-parser use like below.
+
 app.use(bodyParser.urlencoded({ extended: true }));
 
 // Dynamic controller GET,POST 📧📧📧
@@ -24,7 +25,7 @@ app.get("/", (req, res) => {
   });
 });
 
-//profile page 👱👱
+//Profile page 👱👱
 app.get("/profile/:name", (req, res) => {
   var data = {
     hobbies: ["football", "basketball", "eating", "sleep", "coding"]
@@ -36,14 +37,14 @@ app.get("/profile/:name", (req, res) => {
   });
 });
 
-//contact page ☎ ☎
+//Contact page ☎ ☎
 app.get("/contact", (req, res) => {
   res.render("contact", {
     pageTitle: "contact"
   });
 });
 
-//login page 🎫🎫
+//Login page 🎫🎫
 app.get("/login", function(req, res) {
   res.render("login", {
     pageTitle: "login"
@@ -52,71 +53,46 @@ app.get("/login", function(req, res) {
 
 app.post("/login", urlencodedParser, function(req, res) {
   if (!req.body) return res.sendStatus(400);
-  console.log(req.body);
-  // to read file content
+  // To read file content
   var read = fs.readFileSync("data.json", "utf8");
   if (read === "" || read === undefined) {
-    // check if array exist in json file
+    // Check if array exist in json file
     read = Array.from([]);
     fs.writeFileSync("data.json", []);
     var data = read;
   } else {
-    // array exist and convert json to opjects
+    // Array exist and convert json to opjects
     var data = Array.from(JSON.parse(read));
+    // Check if user is exist depending on username and department
+    func.ifExist(data,req.body);
   }
-  // check if user is exist depending on username and department
-  var exist = false;
-  data.find(x => {
-    if (
-      x.username === req.body.username &&
-      x.department === req.body.department
-    ) {
-      exist = true;
-      return "exist";
-    } else {
-      return "not exsit";
-    }
-  });
-  if (!exist) {
-    data.push(req.body);
-  } else {
-    console.log("user already exist");
-    return "exist";
-  }
-// store new data in jmson file 
+  // Store new data in json file
   fs.writeFile("data.json", JSON.stringify(data), function(err) {
     if (err) throw err;
     console.log("Updated!");
   });
+  res.render('contact-success',{
+    pageTitle:'Successful',
+    data:req.body
+
+  })
 });
 
-//check page
+//Check page
 app.get("/check", function(req, res) {
   res.render("check", {
     pageTitle: "Checky page"
   });
 });
 
-//check account allowed to sign in or not
+//Check account allowed to sign in or not
 app.post("/check", urlencodedParser, function(req, res, next) {
   if (!req.body) return res.sendStatus(400);
-  console.log(req.body);
   var read = fs.readFileSync("data.json", "utf8");
   var data = JSON.parse(read);
-  data.find(x => {
-    if (
-      x.username === req.body.username &&
-      x.department === req.body.department
-    ) {
-      console.log("success login .. user exist");
-      return "exist";
-    } else {
-      console.log("Not exist ..");
-      return "not exsit";
-    }
-  });
+  func.ifExist();
   next();
 });
-app.listen(4000, () => {
-  console.log("server work in port 4000");
+app.listen(2020, () => {
+  console.log("server work in port 2020");
 });
