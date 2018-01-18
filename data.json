@@ -1,1 +1,16 @@
-[]
+[
+  {
+    "username": "ali",
+    "age": "22",
+    "department": "cs",
+    "job": "st",
+    "password": "$2a$12$pY508d3dguloHrVZRI5b..IRSEX6kIxyMi6GPWsXhR6XJDUQe2rk6"
+  },
+  {
+    "username": "aa",
+    "age": "15",
+    "department": "xx",
+    "job": "st",
+    "password": "$2a$12$Pxi4orvS/VTwSzbmWTow/OfhJtFgyI1yzcfrWmQNbYpcC4xi1pYS6"
+  }
+]

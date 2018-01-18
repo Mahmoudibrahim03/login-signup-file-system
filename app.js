@@ -45,10 +45,10 @@ app.get("/contact", (req, res) => {
   });
 });
 
-//Login page 🎫🎫
+//sign up page 🎫🎫
 app.get("/signup", function(req, res) {
   res.render("signup", {
-    pageTitle: "login"
+    pageTitle: "Join Us"
   });
 });
 
@@ -67,6 +67,7 @@ app.post("/signup", urlencodedParser, function(req, res) {
     // Check if user is exist depending on username and department
     if (!func.ifExist(data, req.body)) {
       data.push(req.body);
+      // hashing password for security reasons
       bcrypt.hash(req.body.password, 12, function(err, hash) {
         if (err) {
           console.log(err);
@@ -94,20 +95,27 @@ app.post("/signup", urlencodedParser, function(req, res) {
   }
 });
 
-//Check page
+//login page
 app.get("/login", function(req, res) {
   res.render("login", {
-    pageTitle: "Checky page"
+    pageTitle: "login page"
   });
 });
 
-//Check account allowed to sign in or not
-app.post("/check", urlencodedParser, function(req, res, next) {
+//login account allowed to sign in or not
+app.post("/login", urlencodedParser, function(req, res, next) {
   if (!req.body) return res.sendStatus(400);
   var read = fs.readFileSync("data.json", "utf8");
   var data = JSON.parse(read);
-  func.ifExist(data, req.body);
-  next();
+  if(func.ifExist(data, req.body)){
+    console.log("Here am i 😇 ");
+    next();
+  }else{
+    res.render('signup',{
+      pageTitle:"Join us"
+    });
+  }
+  
 });
 app.listen(2020, () => {
   console.log("server work in port 2020");
