@@ -3,7 +3,7 @@ var express = require("express");
 var ejs = require("ejs");
 var bodyParser = require("body-parser");
 var func = require("./control/func");
-var bcrypt = require('bcrypt');
+var bcrypt = require("bcrypt");
 var app = express();
 
 //Static files and engine ⛔⛔⛔
@@ -65,29 +65,33 @@ app.post("/login", urlencodedParser, function(req, res) {
     // Array exist and convert json to opjects
     var data = Array.from(JSON.parse(read));
     // Check if user is exist depending on username and department
-    func.ifExist(data,req.body);
-  }
-  bcrypt.hash(req.body.password, 12, function(err, hash) {
-    if(err){
-      console.log(err);
-      return err;
-    }else{
-      console.log(hash)
-      req.body.password = hash;
-      console.log('pass => '+req.body.password);
-      return hash
+    if (!func.ifExist(data, req.body)) {
+      data.push(req.body);
+      bcrypt.hash(req.body.password, 12, function(err, hash) {
+        if (err) {
+          console.log(err);
+          return err;
+        } else {
+          console.log(hash);
+          req.body.password = hash;
+          // Store new data in json file
+          fs.writeFile("data.json", JSON.stringify(data), function(err) {
+            if (err) throw err;
+            console.log("Updated!");
+            res.render("contact-success", {
+              pageTitle: "Successful",
+              data: req.body
+            });
+          });
+        }
+      });
+    } else {
+      console.log("username already exist");
+      res.render("404", {
+        pageTitle: "username exist"
+      });
     }
-  });
-  console.log(req.body.password);
-  // Store new data in json file
-  fs.writeFile("data.json", JSON.stringify(data), function(err) {
-    if (err) throw err;
-    console.log("Updated!");
-  });
-  res.render('contact-success',{
-    pageTitle:'Successful',
-    data:req.body
-  })
+  }
 });
 
 //Check page
@@ -102,7 +106,7 @@ app.post("/check", urlencodedParser, function(req, res, next) {
   if (!req.body) return res.sendStatus(400);
   var read = fs.readFileSync("data.json", "utf8");
   var data = JSON.parse(read);
-  func.ifExist(data,req.body);
+  func.ifExist(data, req.body);
   next();
 });
 app.listen(2020, () => {

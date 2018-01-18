@@ -1,20 +1,15 @@
 module.exports = {
   // check if user is exist depending on username and department
-  ifExist: function(info,body) {
+  ifExist: function(info, body) {
     var exist = false;
     info.find(x => {
-      if (
-        x.username === body.username 
-      ) {
+      if (x.username === body.username) {
         exist = true;
-        return "exist";
-      } 
+        if(exist){
+        return true;
+      }
+      }
     });
-    if (!exist) {
-      info.push(body);
-    } else {
-      console.log("username already exist");
-      return "exist";
-    }
+    return exist
   }
 };
