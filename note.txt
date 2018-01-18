@@ -1,1 +1,0 @@
-1- if that possible to make css link as variable .. as page title ?!
