@@ -4,8 +4,7 @@ module.exports = {
     var exist = false;
     info.find(x => {
       if (
-        x.username === body.username &&
-        x.department === body.department
+        x.username === body.username 
       ) {
         exist = true;
         return "exist";
@@ -14,7 +13,7 @@ module.exports = {
     if (!exist) {
       info.push(body);
     } else {
-      console.log("user already exist");
+      console.log("username already exist");
       return "exist";
     }
   }

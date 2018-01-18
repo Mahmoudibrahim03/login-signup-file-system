@@ -3,6 +3,7 @@ var express = require("express");
 var ejs = require("ejs");
 var bodyParser = require("body-parser");
 var func = require("./control/func");
+var bcrypt = require('bcrypt');
 var app = express();
 
 //Static files and engine ⛔⛔⛔
@@ -66,6 +67,18 @@ app.post("/login", urlencodedParser, function(req, res) {
     // Check if user is exist depending on username and department
     func.ifExist(data,req.body);
   }
+  bcrypt.hash(req.body.password, 12, function(err, hash) {
+    if(err){
+      console.log(err);
+      return err;
+    }else{
+      console.log(hash)
+      req.body.password = hash;
+      console.log('pass => '+req.body.password);
+      return hash
+    }
+  });
+  console.log(req.body.password);
   // Store new data in json file
   fs.writeFile("data.json", JSON.stringify(data), function(err) {
     if (err) throw err;
@@ -74,7 +87,6 @@ app.post("/login", urlencodedParser, function(req, res) {
   res.render('contact-success',{
     pageTitle:'Successful',
     data:req.body
-
   })
 });
 
@@ -90,7 +102,7 @@ app.post("/check", urlencodedParser, function(req, res, next) {
   if (!req.body) return res.sendStatus(400);
   var read = fs.readFileSync("data.json", "utf8");
   var data = JSON.parse(read);
-  func.ifExist();
+  func.ifExist(data,req.body);
   next();
 });
 app.listen(2020, () => {
