@@ -46,13 +46,13 @@ app.get("/contact", (req, res) => {
 });
 
 //Login page 🎫🎫
-app.get("/login", function(req, res) {
-  res.render("login", {
+app.get("/signup", function(req, res) {
+  res.render("signup", {
     pageTitle: "login"
   });
 });
 
-app.post("/login", urlencodedParser, function(req, res) {
+app.post("/signup", urlencodedParser, function(req, res) {
   if (!req.body) return res.sendStatus(400);
   // To read file content
   var read = fs.readFileSync("data.json", "utf8");
@@ -78,7 +78,7 @@ app.post("/login", urlencodedParser, function(req, res) {
           fs.writeFile("data.json", JSON.stringify(data), function(err) {
             if (err) throw err;
             console.log("Updated!");
-            res.render("contact-success", {
+            res.render("signin-success", {
               pageTitle: "Successful",
               data: req.body
             });
@@ -95,8 +95,8 @@ app.post("/login", urlencodedParser, function(req, res) {
 });
 
 //Check page
-app.get("/check", function(req, res) {
-  res.render("check", {
+app.get("/login", function(req, res) {
+  res.render("login", {
     pageTitle: "Checky page"
   });
 });
