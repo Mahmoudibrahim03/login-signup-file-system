@@ -12,5 +12,12 @@
     "department": "xx",
     "job": "st",
     "password": "$2a$12$Pxi4orvS/VTwSzbmWTow/OfhJtFgyI1yzcfrWmQNbYpcC4xi1pYS6"
+  },
+  {
+    "username": "ali2",
+    "age": "55",
+    "department": "cs",
+    "job": "st",
+    "password": "$2a$12$EVBQ.dWvsey/91oA7gmA5OhKj302YTtUV.G1nD4BFMDoSQ89peZye"
   }
 ]

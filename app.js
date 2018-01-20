@@ -107,7 +107,7 @@ app.post("/login", urlencodedParser, function(req, res, next) {
   if (!req.body) return res.sendStatus(400);
   var read = fs.readFileSync("data.json", "utf8");
   var data = JSON.parse(read);
-  if(func.ifExist(data, req.body)){
+  if(func.ifExist2(data, req.body)){
     console.log("Here am i 😇 ");
     next();
   }else{
